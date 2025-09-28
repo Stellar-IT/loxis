@@ -29,16 +29,16 @@ endif()
 # Set build dir
 set(BUILD_DIR "${CMAKE_SOURCE_DIR}/build/${ARCH_SUFFIX}/${CMAKE_BUILD_TYPE}")
 
-# Prepare options for external libs to be used
+# Prepare options for deps libs to be used
 include(FetchContent)
 
-set(EXTERNAL_INSTALL_DIR "${CMAKE_BINARY_DIR}/external/${ARCH_SUFFIX}")
-set(EXTERNAL_BUILD_DIR "${CMAKE_BINARY_DIR}/external/build/${ARCH_SUFFIX}")
+set(EXTERNAL_INSTALL_DIR "${CMAKE_BINARY_DIR}/deps/${ARCH_SUFFIX}")
+set(EXTERNAL_BUILD_DIR "${CMAKE_BINARY_DIR}/deps/build/${ARCH_SUFFIX}")
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/external")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/deps")
 
-list(PREPEND CMAKE_PREFIX_PATH "${PROJECT_BINARY_DIR}/external/${ARCH_SUFFIX}/lib/cmake")
-set(ENV{PKG_CONFIG_PATH} "${PROJECT_BINARY_DIR}/external/${ARCH_SUFFIX}/lib/pkgconfig")
+list(PREPEND CMAKE_PREFIX_PATH "${PROJECT_BINARY_DIR}/deps/${ARCH_SUFFIX}/lib/cmake")
+set(ENV{PKG_CONFIG_PATH} "${PROJECT_BINARY_DIR}/deps/${ARCH_SUFFIX}/lib/pkgconfig")
 
 # Option to build documentation
 option(BUILD_DOCS "Build documentation" OFF)
@@ -47,50 +47,11 @@ option(BUILD_DOCS "Build documentation" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 
 if(BUILD_DOCS)
-    # Find Doxygen
-    find_package(Doxygen REQUIRED)
-
-    if(NOT DOXYGEN_FOUND)
-        message(FATAL_ERROR "Doxygen is required to build the documentation")
-    else()
-        message(STATUS "Found Doxygen: ${DOXYGEN_EXECUTABLE}")
-    endif()
-
-    # Check for Graphviz dot
-    find_program(GRAPHVIZ_DOT_EXECUTABLE dot)
-
-    if(NOT GRAPHVIZ_DOT_EXECUTABLE)
-        message(FATAL_ERROR "Graphviz (dot) not found. It is required to build documentation.")
-    else()
-        message(STATUS "Found Graphviz: ${GRAPHVIZ_DOT_EXECUTABLE}")
-    endif()
-
-    # configure Doxygen
-#    set(DOXYGEN_GENERATE_HTML YES)
-#    set(DOXYGEN_GENERATE_LATEX NO)
-#    set(DOXYGEN_DOT_EXECUTABLE "${GRAPHVIZ_DOT_EXECUTABLE}")
-
-    set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/docs/Doxyfile.in)
-    set(DOXYGEN_OUT ${CMAKE_BINARY_DIR}/Doxyfile)
-    set(DOXYGEN_DOT_EXECUTABLE "${GRAPHVIZ_DOT_EXECUTABLE}")
-
-    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-
-    add_custom_target(doc_doxygen
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen"
-        VERBATIM
-    )
-
-#    doxygen_add_docs(
-#        docs
-#        ${CMAKE_SOURCE_DIR}/loxis
-#    )
+    add_subdirectory(docs)
 endif()
 
 if(BUILD_TESTS)
-    include(external/gtest.cmake)
+    include(deps/gtest.cmake)
     find_package(GTest 1.17.0 EXACT REQUIRED)
 
     enable_testing()
