@@ -1,0 +1,32 @@
+# CMake build files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+build/
+*.dir/
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+
+# CLion IDE files
+.idea/
+*.iml
+cmake-build-*/
+
+# VS Code files
+.vscode/
+
+# Mac OS files
+.DS_Store
+
+# Other editor backup files
+*~
+*.swp
+*.swo
+
+# Logs
+*.log
