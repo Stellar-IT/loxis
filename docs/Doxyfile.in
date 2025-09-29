@@ -2,7 +2,7 @@
 PROJECT_NAME           = "@PROJECT_NAME@"
 PROJECT_BRIEF          = "Lightweight distributed log system in C++"
 OUTPUT_DIRECTORY       = "@CMAKE_CURRENT_BINARY_DIR@/docs"
-INPUT                  = "@CMAKE_SOURCE_DIR@/loxis"
+INPUT                  = "@CMAKE_SOURCE_DIR@/src"
 RECURSIVE              = YES
 
 # Output
